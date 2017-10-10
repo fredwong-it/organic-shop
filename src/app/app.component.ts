@@ -1,3 +1,4 @@
+import { UserService } from './user.service';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { Component } from '@angular/core';
@@ -8,11 +9,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private auth: AuthService, router: Router) {
+  constructor(private userService: UserService, private auth: AuthService, router: Router) {
     // subscribe to identify login and logout
     auth.user$.subscribe(user => {
       // the user will be null when logout
       if (user) {
+        userService.save(user);
+
         const returnUrl = localStorage.getItem('returnUrl');
         router.navigateByUrl(returnUrl);
       }
