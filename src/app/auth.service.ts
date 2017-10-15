@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 import { AppUser } from './models/app-user';
 import { UserService } from './user.service';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/observable/of';
 
 @Injectable()
 export class AuthService {
@@ -32,6 +33,12 @@ export class AuthService {
   // nested observable will cause async pipe a infinite loop
   get appUser$(): Observable<AppUser> {
     return this.user$
-      .switchMap(user => this.userService.get(user.uid));
+      .switchMap(user => {
+        if (user) {
+          return this.userService.get(user.uid);
+        }
+
+        return Observable.of(null);
+      });
   }
 }
