@@ -1,7 +1,8 @@
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../../category.service';
 import { ProductService } from '../../product.service';
+import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'app-product-form',
@@ -11,15 +12,26 @@ import { ProductService } from '../../product.service';
 export class ProductFormComponent implements OnInit {
 
   categories$;
+  product = {};
 
   constructor(
     categoryService: CategoryService,
     private productService: ProductService,
-    private router: Router) {
+    private router: Router,
+    private route: ActivatedRoute) {
     this.categories$ = categoryService.getCategories();   // this is observable
   }
 
   ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      // take operator will only take 1 value from the observable and it will automatically be completed
+      // we don't need to explicity unsubscribe because the observable won't emit any new value
+      this.productService.get(id).take(1).subscribe(p => this.product = p);
+    }
+
+    console.log(id);
   }
 
   save(product) {
