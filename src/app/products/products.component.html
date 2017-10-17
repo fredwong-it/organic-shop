@@ -1,31 +1,42 @@
-<!--
-this implementation will display 2 column even if the screen shrink to narrow
 <div class="row">
-  <div class="col-6" *ngFor="let p of products$ | async">
-    <div class="card" style="width: 15rem;" *ngIf="p.title">
-      <img class="card-img-top" [src]="p.imageUrl" *ngIf="p.imageUrl">
-      <div class="card-body">
-        <h4 class="card-title">{{ p.title }}</h4>
-        <p class="card-text">{{ p.price | currency:'USD': true }}</p>
-        <a href="#" class="btn btn-primary">Add to Card</a>
-      </div>
-    </div>
+  <div class="col-3">
+    <ul class="list-group">
+      <li *ngFor="let c of categories$ | async" class="list-group-item">
+        {{ c.name }}
+      </li>
+    </ul>
   </div>
-</div>-->
-
-<!--this implementation will display 1 column if the screen shrink to narrow-->
-<div class="row">
-  <ng-container *ngFor="let p of products$ | async; let i = index">
-    <div class="col">
-      <div class="card" style="width: 15rem;" *ngIf="p.title">
-        <img class="card-img-top" [src]="p.imageUrl" *ngIf="p.imageUrl">
-        <div class="card-body">
-          <h4 class="card-title">{{ p.title }}</h4>
-          <p class="card-text">{{ p.price | currency:'USD': true }}</p>
-          <a href="#" class="btn btn-primary">Add to Card</a>
+  <div class="col">
+    <!--
+    this implementation will display 2 column even if the screen shrink to narrow
+    <div class="row">
+      <div class="col-6" *ngFor="let p of products$ | async">
+        <div class="card" style="width: 15rem;" *ngIf="p.title">
+          <img class="card-img-top" [src]="p.imageUrl" *ngIf="p.imageUrl">
+          <div class="card-body">
+            <h4 class="card-title">{{ p.title }}</h4>
+            <p class="card-text">{{ p.price | currency:'USD': true }}</p>
+            <a href="#" class="btn btn-primary">Add to Card</a>
+          </div>
         </div>
       </div>
+    </div>-->
+    <!--this implementation will display 1 column if the screen shrink to narrow-->
+    <div class="row">
+      <ng-container *ngFor="let p of products$ | async; let i = index">
+        <div class="col">
+          <div class="card" style="width: 15rem;" *ngIf="p.title">
+            <img class="card-img-top" [src]="p.imageUrl" *ngIf="p.imageUrl">
+            <div class="card-body">
+              <h4 class="card-title">{{ p.title }}</h4>
+              <p class="card-text">{{ p.price | currency:'USD': true }}</p>
+              <a href="#" class="btn btn-primary">Add to Card</a>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="(i + 1) % 2 === 0" class="w-100"></div>
+      </ng-container>
     </div>
-    <div *ngIf="(i + 1) % 2 === 0" class="w-100"></div>
-  </ng-container>
+  </div>
 </div>
+
