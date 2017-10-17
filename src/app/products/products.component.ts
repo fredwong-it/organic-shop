@@ -4,6 +4,7 @@ import { CategoryService } from './../category.service';
 import { ProductService } from './../product.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
+import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'app-products',
@@ -22,18 +23,22 @@ export class ProductsComponent implements OnInit, OnDestroy {
     productService: ProductService,
     categoryService: CategoryService) {
     this.categories$ = categoryService.getAll();
+
     this.subscription = productService.getAll()
-      .subscribe(products => this.products = products);
+      // switch from getAll observable to queryParamMap observable
+      .switchMap(products => {
+        this.products = products;
+        return route.queryParamMap;
+      })
+      // can't use snapshot because the component won't be destroy when user choose different category
+      // it needs to subscribe the category observable to display different category route
+      .subscribe(params => {
+        this.category = params.get('category');
 
-    // can't use snapshot because the component won't be destroy when user choose different category
-    // it needs to subscribe the category observable to display different category route
-    route.queryParamMap.subscribe(params => {
-      this.category = params.get('category');
-
-      this.filteredProducts = (this.category) ?
-        this.products.filter(p => p.category === this.category) :
-        this.products;
-    });
+        this.filteredProducts = (this.category) ?
+          this.products.filter(p => p.category === this.category) :
+          this.products;
+      });
   }
 
   ngOnInit() {
