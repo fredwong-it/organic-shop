@@ -20,7 +20,7 @@ export class ProductFormComponent implements OnInit {
     private productService: ProductService,
     private router: Router,
     private route: ActivatedRoute) {
-    this.categories$ = categoryService.getCategories();   // this is observable
+    this.categories$ = categoryService.getAll();   // this is observable
   }
 
   ngOnInit() {
