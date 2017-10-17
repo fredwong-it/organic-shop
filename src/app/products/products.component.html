@@ -1,10 +1,14 @@
 <div class="row">
   <div class="col-3">
-    <ul class="list-group">
-      <li *ngFor="let c of categories$ | async" class="list-group-item">
+    <div class="list-group">
+      <a *ngFor="let c of categories$ | async"
+        routerLink="/"
+        [queryParams]="{ category: c.$key }"
+        class="list-group-item list-group-item-action"
+        [class.active]="category === c.$key">
         {{ c.name }}
-      </li>
-    </ul>
+      </a>
+    </div>
   </div>
   <div class="col">
     <!--
@@ -23,7 +27,7 @@
     </div>-->
     <!--this implementation will display 1 column if the screen shrink to narrow-->
     <div class="row">
-      <ng-container *ngFor="let p of products$ | async; let i = index">
+      <ng-container *ngFor="let p of filteredProducts; let i = index">
         <div class="col">
           <div class="card" style="width: 15rem;" *ngIf="p.title">
             <img class="card-img-top" [src]="p.imageUrl" *ngIf="p.imageUrl">
