@@ -10,16 +10,19 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   constructor(private userService: UserService, private auth: AuthService, router: Router) {
+    // get rid of the nested if
     // subscribe to identify login and logout
     auth.user$.subscribe(user => {
-      // the user will be null when logout
-      if (user) {
-        userService.save(user);
+      if (!user) return;        // the user will be null when logout
 
-        const returnUrl = localStorage.getItem('returnUrl');
-        //localStorage.removeItem('returnUrl');
-        router.navigateByUrl(returnUrl);
-      }
+      userService.save(user);
+
+      // this should only happen once as part of our authentication process
+      const returnUrl = localStorage.getItem('returnUrl');
+      if (!returnUrl) return;
+
+      localStorage.removeItem('returnUrl');       // remove the returnUrl after we use it once
+      router.navigateByUrl(returnUrl);
     });
   }
 }
