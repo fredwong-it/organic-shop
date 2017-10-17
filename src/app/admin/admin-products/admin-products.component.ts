@@ -10,11 +10,10 @@ import { DataTableResource } from 'angular-4-data-table';
   styleUrls: ['./admin-products.component.css']
 })
 export class AdminProductsComponent implements OnInit, OnDestroy {
-  products: Product[];
-  filteredProducts: any[];
+  products: Product[];              // all items from the service
   subscription: Subscription;
   tableResource: DataTableResource<Product>;
-  items: Product[] = [];
+  items: Product[] = [];            // the items displayed on the data table
   itemCount: number;
 
   constructor(private productService: ProductService) {
@@ -23,7 +22,7 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
     // so we need to unsubscribe the observable on the ngOnDestroy
     this.subscription = this.productService.getAll()
       .subscribe(products => {
-        this.filteredProducts = this.products = products;     // set the filteredProducts at the first time
+        this.products = products;
         this.initializeTable(products);
       });
   }
@@ -37,7 +36,7 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
   }
 
   reloadItems(params) {
-    if (!this.tableResource) return;
+    if (!this.tableResource) return;    // reload will be trigger at once at the beginnig and tableResource will be null at that time
 
     this.tableResource.query(params)            // params passed from the component
       .then(items => this.items = items);
@@ -54,8 +53,11 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
     console.log(query);
 
     // either filter the products or display all products
-    this.filteredProducts = (query) ?
+    const filteredProducts = (query) ?
       this.products.filter(p => p.title.toLowerCase().includes(query.toLowerCase())) :
       this.products;
+
+    // re-initialize the table after filtering
+    this.initializeTable(filteredProducts);
   }
 }
