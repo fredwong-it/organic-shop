@@ -12,18 +12,12 @@ import 'rxjs/add/operator/switchMap';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit, OnDestroy {
-  categories$;
   products: Product[] = [];
   filteredProducts: Product[];
   subscription: Subscription;
   category: string;
 
-  constructor(
-    route: ActivatedRoute,
-    productService: ProductService,
-    categoryService: CategoryService) {
-    this.categories$ = categoryService.getAll();
-
+  constructor(route: ActivatedRoute, productService: ProductService) {
     this.subscription = productService.getAll()
       // switch from getAll observable to queryParamMap observable
       .switchMap(products => {
