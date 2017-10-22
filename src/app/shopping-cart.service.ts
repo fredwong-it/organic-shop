@@ -18,6 +18,10 @@ export class ShoppingCartService {
     return this.db.object('/shopping-carts/' + cartId);
   }
 
+  private getItem(cartId: string, productId: string) {
+    return this.db.object('/shopping-carts/' + cartId + '/items/' + productId);
+  }
+
   private async getOrCreateCartId() {
     const cartId = localStorage.getItem('cartId');
     if (cartId) return cartId;
@@ -29,12 +33,11 @@ export class ShoppingCartService {
 
   async addToCart(product: Product) {
     const cartId = await this.getOrCreateCartId();      // async method return promise, so we need to use the await again to get the value
-    const item$ = this.db.object('/shopping-carts/' + cartId + '/items/' + product.$key);
+    const item$ = this.getItem(cartId, product.$key);
 
     // we use take because we don't want to unsubscribe and we only need value once in here
     item$.take(1).subscribe(item => {
-      if (item.$exists()) item$.update({ quantity: item.quantity + 1 });    // update quantity
-      else item$.set({ product: product, quantity: 1 });      // set quantity 1
-    })
+      item$.update({ product: product, quantity: (item.quantity || 0) + 1 });   // use item.quantity or 0 if item.quantity is undefined
+    });
   }
 }
