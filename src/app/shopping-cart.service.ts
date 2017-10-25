@@ -33,12 +33,20 @@ export class ShoppingCartService {
   }
 
   async addToCart(product: Product) {
+    this.updateItemQuantity(product, 1);
+  }
+
+  async removeFromCart(product: Product) {
+    this.updateItemQuantity(product, -1);
+  }
+
+  private async updateItemQuantity(product: Product, change: number) {
     const cartId = await this.getOrCreateCartId();      // async method return promise, so we need to use the await again to get the value
     const item$ = this.getItem(cartId, product.$key);
 
     // we use take because we don't want to unsubscribe and we only need value once in here
     item$.take(1).subscribe(item => {
-      item$.update({ product: product, quantity: (item.quantity || 0) + 1 });   // use item.quantity or 0 if item.quantity is undefined
+      item$.update({ product: product, quantity: (item.quantity || 0) + change });   // use item.quantity or 0 if item.quantity is undefined
     });
   }
 }
