@@ -5,6 +5,11 @@ export class ShoppingCart {
     constructor(public items: ShoppingCartItem[]) {
     }
 
+    // return all keys in the item object, which is all productIds
+    get productIds() {
+        return Object.keys(this.items);
+    }
+
     // property to calculate the total items count
     // this part of logic should belong to ShoppingCart object
     get totalItemsCount() {
