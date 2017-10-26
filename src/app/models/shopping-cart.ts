@@ -1,4 +1,5 @@
 import { ShoppingCartItem } from './shopping-cart-item';
+import { Product } from './product';
 
 
 export class ShoppingCart {
@@ -34,5 +35,11 @@ export class ShoppingCart {
         }
 
         return price;
+    }
+
+    // move the getQuantity to the shoppingCart object to make it as object oriented design
+    getQuantity(product: Product) {
+        const item = this.itemsMap[product.$key];
+        return item ? item.quantity : 0;
     }
 }
