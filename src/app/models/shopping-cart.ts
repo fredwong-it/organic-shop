@@ -39,7 +39,8 @@ export class ShoppingCart {
 
     // move the getQuantity to the shoppingCart object to make it as object oriented design
     getQuantity(product: Product) {
-        const item = this.itemsMap[product.$key];
+        console.log('product', product);
+        const item = this.itemsMap ? this.itemsMap[product.$key] : null;
         return item ? item.quantity : 0;
     }
 }
