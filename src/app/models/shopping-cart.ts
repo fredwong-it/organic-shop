@@ -10,14 +10,16 @@ export class ShoppingCart {
         this.itemsMap = itemsMap || {};
 
         // initialize the items from the itemsMap object
+        // tslint:disable-next-line:forin
         for (const productId in itemsMap) {
             // create ShoppingCartItem
             const item = itemsMap[productId];
-            let x = new ShoppingCartItem();
-            Object.assign(x, item);
-            x.$key = productId;         // set $key value
 
-            this.items.push(x);         // cart item with $key
+            // cart item with $key
+            this.items.push(new ShoppingCartItem({
+                ...item,                // spread operator
+                $key: productId         // set $key value
+            }));
         }
     }
 
@@ -27,6 +29,7 @@ export class ShoppingCart {
         let count = 0;
 
         // calculate the shoppingCartItemCount
+        // tslint:disable-next-line:forin
         for (const productId in this.itemsMap) {
             count += this.itemsMap[productId].quantity;
         }
