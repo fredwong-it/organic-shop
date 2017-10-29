@@ -1,11 +1,11 @@
 import { ShoppingCartItem } from './shopping-cart-item';
 import { Product } from './product';
 
-
 export class ShoppingCart {
     items: ShoppingCartItem[] = [];
 
-    constructor(public itemsMap: { [productId: string]: ShoppingCartItem }) {
+    // itemsMap should only be accessible inside the class
+    constructor(private itemsMap: { [productId: string]: ShoppingCartItem }) {
         // initialize, set itemsMap to empty object if it is undefined
         this.itemsMap = itemsMap || {};
 
