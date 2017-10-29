@@ -60,13 +60,19 @@ export class ShoppingCartService {
 
     // we use take because we don't want to unsubscribe and we only need value once in here
     item$.take(1).subscribe(item => {
-      // new structure for the shopping cart item
-      item$.update({
-        title: product.title,
-        imageUrl: product.imageUrl,
-        price: product.price,
-        quantity: (item.quantity || 0) + change   // use item.quantity or 0 if item.quantity is undefined
-      });
+      const quantity = (item.quantity || 0) + change;   // use item.quantity or 0 if item.quantity is undefined
+
+      if (quantity === 0) {
+        item$.remove();   // item FirebaseObjectObservable
+      } else {
+        // new structure for the shopping cart item
+        item$.update({
+          title: product.title,
+          imageUrl: product.imageUrl,
+          price: product.price,
+          quantity: quantity
+        });
+      }
     });
   }
 }
