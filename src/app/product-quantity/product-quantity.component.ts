@@ -21,4 +21,8 @@ export class ProductQuantityComponent {
   removeFromCart() {
     this.cartService.removeFromCart(this.product);
   }
+
+  getQuantity() {
+    return this.shoppingCart.getQuantity(this.product);
+  }
 }
