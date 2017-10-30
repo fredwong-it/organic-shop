@@ -6,6 +6,7 @@ import { ShoppingCartService } from './../shopping-cart.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Order } from '../models/order';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-check-out',
@@ -20,6 +21,7 @@ export class CheckOutComponent implements OnInit, OnDestroy {
   userSubscription: Subscription;
 
   constructor(
+    private router: Router,
     private cartService: ShoppingCartService,
     private orderService: OrderService,
     private authService: AuthService) {
@@ -36,9 +38,15 @@ export class CheckOutComponent implements OnInit, OnDestroy {
     this.userSubscription.unsubscribe();
   }
 
-  placeOrder() {
-    console.log(this.shipping);
+  async placeOrder() {
+    //console.log(this.shipping);
     const order = new Order(this.userId, this.shipping, this.cart);
-    this.orderService.storeOrder(order);
+
+    // storeOrder return a promise, either use then or await to get the result
+    const result = await this.orderService.storeOrder(order);
+
+    // $key - read a node from firebase
+    // key - when you store something in firebase, firebase returns these newly generated ID in this key property
+    this.router.navigate(['/order-success', result.key]);
   }
 }
