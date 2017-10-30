@@ -5,6 +5,7 @@ import { ShoppingCart } from '../models/shopping-cart';
 import { ShoppingCartService } from './../shopping-cart.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { Order } from '../models/order';
 
 @Component({
   selector: 'app-check-out',
@@ -37,25 +38,7 @@ export class CheckOutComponent implements OnInit, OnDestroy {
 
   placeOrder() {
     console.log(this.shipping);
-
-    const order = {
-      userId: this.userId,
-      datePlaced: new Date().getTime(),
-      shipping: this.shipping,
-      // map to the order items from shopping-cart item
-      items: this.cart.items.map(i => {
-        return {
-          product: {
-            title: i.title,
-            imageUrl: i.imageUrl,
-            price: i.price
-          },
-          quantity: i.quantity,
-          totalPrice: i.totalPrice
-        };
-      })
-    };
-
+    const order = new Order(this.userId, this.shipping, this.cart);
     this.orderService.storeOrder(order);
   }
 }
