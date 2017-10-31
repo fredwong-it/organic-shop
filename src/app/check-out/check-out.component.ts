@@ -43,7 +43,7 @@ export class CheckOutComponent implements OnInit, OnDestroy {
     const order = new Order(this.userId, this.shipping, this.cart);
 
     // storeOrder return a promise, either use then or await to get the result
-    const result = await this.orderService.storeOrder(order);
+    const result = await this.orderService.placeOrder(order);
 
     // $key - read a node from firebase
     // key - when you store something in firebase, firebase returns these newly generated ID in this key property
