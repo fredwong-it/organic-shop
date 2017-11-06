@@ -29,5 +29,6 @@
   </div>
   <button 
     (click)="placeOrder()"
+    [disabled]="f.invalid"
     class="btn btn-primary">Place Order</button>
 </form>
