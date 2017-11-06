@@ -1,5 +1,5 @@
-import { ShoppingCart } from './models/shopping-cart';
-import { Product } from './models/product';
+import { ShoppingCart } from '../models/shopping-cart';
+import { Product } from '../models/product';
 import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/take';
