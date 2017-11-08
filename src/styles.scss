@@ -2,6 +2,17 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 @import "~font-awesome/css/font-awesome.css";
 
+$primary-color: #00efd3;
+
 body {
     padding-top: 80px;
+}
+
+.navbar-light .navbar-brand {
+    color: $primary-color;
+}
+
+.list-group-item.active {
+    background-color: $primary-color;
+    border-color: $primary-color;
 }
